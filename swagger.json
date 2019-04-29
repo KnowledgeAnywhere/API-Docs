@@ -1,23 +1,23 @@
 {
   "openapi" : "3.0.0",
+  "servers" : [ {
+    "description" : "Fortuna API Prod Server",
+    "url" : "https://publicapi.knowledgeanywhere.com/v1"
+  }, {
+    "description" : "Fortuna API QA Server",
+    "url" : "https://externalapi.lms.knowledgeanywhere.com/v1"
+  }, {
+    "description" : "SwaggerHub API Auto Mocking",
+    "url" : "https://virtserver.swaggerhub.com/Knowledge-Anywhere/LMS_API/1.0.0"
+  } ],
   "info" : {
-    "title" : "Knowledge Anywhere LMS API",
-    "description" : "# Introduction\nThe Knowledge Anywhere API is provided to you in order to assist you in provisioning users and reporting.\n## Authentication\nThe API expects a `Authorization` header containing a bearer token to be sent with each request to the API.  In order to properly authorize with the API you will need to sign into your LMS's admin panel and obtain your client and secret keys under the Site section. \n\n\n  ## Rate Limiting\n\n  By default, the throttle (Rate Limit) is set to 100 requests per minute.   If you find you need capacity beyond the specified rate limit you may contact support to apply for a higher limit.   If the limit is exceeded in the given 60 second window, the request will return `409 - APPLICATION RATE LIMIT EXCEEDED`. Further requests will be banned for one minute.\n  \n  \n  ### Rate Limit Additional Information\n  \n  Each request returns two headers so you may track your rate limit.\n  \n  - `X-RATE-LIMIT-LIMIT` contains an integer representing the amount of requests you have made during the current window.\n  - `X-RATE-LIMIT-REMAINING` contains an integer representing the amount of requests remaining until you hit the the limit.    A value of `-1` means you have exceeded the rate limit.\n\n\n## Paging\n\n Where applicable, record sets are limited to 1000 records by default.   You can use the `offset` parameter to page through the records.    Start with a `offset` of `0` (or no offset at all), and increase it by `1000` with each request.\n\n## Examples\n- Simple Node example calling the `/users` endpoint with a `GET` to grab all users.   Shows how to grab a token and call the API with paging.  Link: [Github Gist](https://gist.github.com/TaylorAckley/8977bc38659d3d0010a0135351de5d83)",
+    "version" : "1.0.0",
     "contact" : {
       "email" : "support@knowledgeanywhere.com"
     },
-    "version" : "1.0.0"
+    "title" : "Knowledge Anywhere LMS API",
+    "description" : "# Introduction\nThe Knowledge Anywhere API is provided to you in order to assist you in provisioning users and reporting.\n## Authentication\nThe API expects a `Authorization` header containing a bearer token to be sent with each request to the API.  In order to properly authorize with the API you will need to sign into your LMS's admin panel and obtain your client and secret keys under the Site section. \n\n\n  ## Rate Limiting\n\n  By default, the throttle (Rate Limit) is set to 100 requests per minute.   If you find you need capacity beyond the specified rate limit you may contact support to apply for a higher limit.   If the limit is exceeded in the given 60 second window, the request will return `409 - APPLICATION RATE LIMIT EXCEEDED`. Further requests will be banned for one minute.\n  \n  \n  ### Rate Limit Additional Information\n  \n  Each request returns two headers so you may track your rate limit.\n  \n  - `X-RATE-LIMIT-LIMIT` contains an integer representing the amount of requests you have made during the current window.\n  - `X-RATE-LIMIT-REMAINING` contains an integer representing the amount of requests remaining until you hit the the limit.    A value of `-1` means you have exceeded the rate limit.\n\n\n## Paging\n\n Where applicable, record sets are limited to 1000 records by default.   You can use the `offset` parameter to page through the records.    Start with a `offset` of `0` (or no offset at all), and increase it by `1000` with each request.\n\n## Examples\n- Simple Node example calling the `/users` endpoint with a `GET` to grab all users.   Shows how to grab a token and call the API with paging.  Link: [Github Gist](https://gist.github.com/TaylorAckley/8977bc38659d3d0010a0135351de5d83)"
   },
-  "servers" : [ {
-    "url" : "https://publicapi.knowledgeanywhere.com/v1",
-    "description" : "Fortuna API Prod Server"
-  }, {
-    "url" : "https://externalapi.lms.knowledgeanywhere.com/v1",
-    "description" : "Fortuna API QA Server"
-  }, {
-    "url" : "https://virtserver.swaggerhub.com/Knowledge-Anywhere/LMS_API/1.0.0",
-    "description" : "SwaggerHub API Auto Mocking"
-  } ],
   "security" : [ {
     "bearerAuth" : [ "user", "users" ]
   } ],
@@ -82,68 +82,18 @@
       }
     },
     "/user/{externalId}" : {
-      "get" : {
-        "summary" : "Fetch a user from the LMS",
-        "description" : "Returns a user object that matches the externalId in the path.",
-        "parameters" : [ {
-          "name" : "externalId",
-          "in" : "path",
-          "description" : "externalId of the user",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/User"
-                }
-              }
-            }
-          },
-          "400" : {
-            "description" : "Bad request."
-          },
-          "401" : {
-            "description" : "Authorization information is missing or invalid."
-          },
-          "5XX" : {
-            "description" : "Unexpected server error. See Response Body for detail.",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ErrorResponse"
-                }
-              },
-              "application/xml" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
       "put" : {
         "summary" : "Update a user in the LMS",
-        "description" : "Updates the user record.   Partial updates are allowed.  \n**User properties `email` and `externalId` properties are unable to be updated at this time.**",
         "operationId" : "updateUser",
+        "description" : "Updates the user record.   Partial updates are allowed.  \n**User properties `email` and `externalId` properties are unable to be updated at this time.**",
         "parameters" : [ {
-          "name" : "externalId",
           "in" : "path",
-          "description" : "externalId of the user",
+          "name" : "externalId",
           "required" : true,
-          "style" : "simple",
-          "explode" : false,
           "schema" : {
             "type" : "string"
-          }
+          },
+          "description" : "externalId of the user"
         } ],
         "requestBody" : {
           "content" : {
@@ -196,19 +146,63 @@
           }
         }
       },
+      "get" : {
+        "summary" : "Fetch a user from the LMS",
+        "description" : "Returns a user object that matches the externalId in the path.",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "externalId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "description" : "externalId of the user"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request."
+          },
+          "401" : {
+            "description" : "Authorization information is missing or invalid."
+          },
+          "5XX" : {
+            "description" : "Unexpected server error. See Response Body for detail.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
       "delete" : {
         "summary" : "Marks a user inactive or active",
         "description" : "Used for making users inactive in the LMS. To reactivate a user use the 'put' functionality",
         "parameters" : [ {
-          "name" : "externalId",
           "in" : "path",
-          "description" : "externalId of the user",
+          "name" : "externalId",
           "required" : true,
-          "style" : "simple",
-          "explode" : false,
           "schema" : {
             "type" : "string"
-          }
+          },
+          "description" : "externalId of the user"
         } ],
         "responses" : {
           "200" : {
@@ -245,66 +239,53 @@
         "parameters" : [ {
           "name" : "externalIds",
           "in" : "query",
-          "description" : "Comma separated list of externalIds to return. Commas must be escaped for HTML.",
           "required" : false,
-          "style" : "form",
-          "explode" : true,
           "schema" : {
             "type" : "string"
-          }
+          },
+          "description" : "Comma separated list of externalIds to return. Commas must be escaped for HTML."
         }, {
           "name" : "ssoIds",
           "in" : "query",
-          "description" : "Comma separated list of ssoIds (SAML) to return. Commas must be escaped for HTML.",
           "required" : false,
-          "style" : "form",
-          "explode" : true,
           "schema" : {
             "type" : "string"
-          }
+          },
+          "description" : "Comma separated list of ssoIds (SAML) to return. Commas must be escaped for HTML."
         }, {
           "name" : "emails",
           "in" : "query",
-          "description" : "Comma separated list of emails to return. Commas must be escaped for HTML.    Each item ill be executed as a search, not an exact match.   This means searching for `@knowledgeanywhere.com` will return any email address where ``",
           "required" : false,
-          "style" : "form",
-          "explode" : true,
           "schema" : {
             "type" : "string"
-          }
+          },
+          "description" : "Comma separated list of emails to return. Commas must be escaped for HTML.    Each item ill be executed as a search, not an exact match.   This means searching for `@knowledgeanywhere.com` will return any email address where ``"
         }, {
           "name" : "offset",
           "in" : "query",
-          "description" : "Offsets the collection.    A value of 0 means you will receive the first 1000 records.   A value of 1000 means you will receive records 10001 through 2000.",
           "required" : false,
-          "style" : "form",
-          "explode" : true,
           "schema" : {
             "type" : "string",
-            "default" : "0"
-          }
+            "default" : 0
+          },
+          "description" : "Offsets the collection.    A value of 0 means you will receive the first 1000 records.   A value of 1000 means you will receive records 10001 through 2000."
         }, {
           "name" : "startdate",
           "in" : "query",
-          "description" : "Starting create date for users to return.   Date should be a unix timestamp in milliseconds.",
           "required" : false,
-          "style" : "form",
-          "explode" : true,
           "schema" : {
             "type" : "string"
           },
-          "example" : 1517432047952
+          "example" : 1517432047952,
+          "description" : "Starting create date for users to return.   Date should be a unix timestamp in milliseconds."
         }, {
           "name" : "enddate",
           "in" : "query",
-          "description" : "Ending create date for users to return.   Date should be a unix timestamp in milliseconds.",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
           "schema" : {
             "type" : "string"
           },
-          "example" : 1517432047952
+          "example" : 1517432047952,
+          "description" : "Ending create date for users to return.   Date should be a unix timestamp in milliseconds."
         } ],
         "responses" : {
           "200" : {
@@ -343,6 +324,23 @@
     }
   },
   "components" : {
+    "securitySchemes" : {
+      "oAuthToken" : {
+        "type" : "oauth2",
+        "description" : "Obtain Keys from the LMS admin panel and use them to request a token by doing a post to the /auth/token endpoint.   A succesful request will return an `access_code` that can be included in a Authorization header in the format of `Authorization: Bearer {access_token}`",
+        "flows" : {
+          "clientCredentials" : {
+            "tokenUrl" : "http://publicapi.knowledgeanywhere.com/auth/token"
+          }
+        }
+      },
+      "bearerAuth" : {
+        "description" : "Authorization header containing bearer token.   You must first get an `access_token` more info:  [https://somelink]",
+        "type" : "http",
+        "scheme" : "bearer",
+        "bearerFormat" : "JWT"
+      }
+    },
     "schemas" : {
       "Users" : {
         "type" : "array",
@@ -351,38 +349,38 @@
         }
       },
       "User" : {
-        "required" : [ "email", "externalId", "firstName", "lastName" ],
         "type" : "object",
+        "required" : [ "firstName", "lastName", "email", "externalId" ],
         "properties" : {
           "externalId" : {
             "type" : "string",
-            "description" : "The unique identifier from the system calling the API for this user",
-            "example" : "d290f1ee-6c54-4b01-90e6-d701748f0851, DOMAIN\\piperg, 5003000000D8cuI"
+            "example" : "d290f1ee-6c54-4b01-90e6-d701748f0851, DOMAIN\\piperg, 5003000000D8cuI",
+            "description" : "The unique identifier from the system calling the API for this user"
           },
           "firstName" : {
             "type" : "string",
-            "description" : "The first name for the user",
-            "example" : "Piper"
+            "example" : "Piper",
+            "description" : "The first name for the user"
           },
           "lastName" : {
             "type" : "string",
-            "description" : "The last name for the user",
-            "example" : "Nash"
+            "example" : "Nash",
+            "description" : "The last name for the user"
           },
           "email" : {
             "type" : "string",
-            "description" : "The email for the user.",
-            "example" : "piper@knowledgeanywhere.com"
+            "example" : "piper@knowledgeanywhere.com",
+            "description" : "The email for the user."
           },
           "sitename" : {
             "type" : "string",
-            "description" : "The name of the site.",
-            "example" : "Main Site"
+            "example" : "Main Site",
+            "description" : "The name of the site."
           },
           "ssoId" : {
             "type" : "string",
-            "description" : "Unique identifier utilized by the Single Sign-on system integrated with the LMS used to uniquely identify this user for sign-on.  If Provisioning and SSO are handled by the same system this could be the same data passed for externalId.",
-            "example" : "piper@knowledgeanywhere.com"
+            "example" : "piper@knowledgeanywhere.com",
+            "description" : "Unique identifier utilized by the Single Sign-on system integrated with the LMS used to uniquely identify this user for sign-on.  If Provisioning and SSO are handled by the same system this could be the same data passed for externalId."
           },
           "password" : {
             "type" : "string",
@@ -390,8 +388,8 @@
           },
           "active" : {
             "type" : "boolean",
-            "description" : "Make user active/inactive in the LMS",
-            "default" : true
+            "default" : true,
+            "description" : "Make user active/inactive in the LMS"
           },
           "sendInitialEmail" : {
             "type" : "boolean",
@@ -403,68 +401,103 @@
           },
           "locale" : {
             "type" : "string",
-            "description" : "The 4 letter language code. If the code is not active in the LMS the user will be defaulted to the default LMS value. In most cases this is EN-US.    Defaults to EN-US.   If a invalid locale is passed in, the operation will continue, but will return a warning.",
-            "example" : "en-us, es-es, fr-fr"
+            "example" : "en-us, es-es, fr-fr",
+            "description" : "The 4 letter language code. If the code is not active in the LMS the user will be defaulted to the default LMS value. In most cases this is EN-US.    Defaults to EN-US.   If a invalid locale is passed in, the operation will continue, but will return a warning."
           },
           "registrationCode" : {
             "type" : "string",
-            "description" : "If your LMS uses registration codes for users to self register use this field to assign that code to the user. The value passed in must match a value in the LMS, if no match is found the request will result in a 400 bad request.",
-            "example" : "wewillrockyou"
+            "example" : "wewillrockyou",
+            "description" : "If your LMS uses registration codes for users to self register use this field to assign that code to the user. The value passed in must match a value in the LMS, if no match is found the request will result in a 400 bad request."
           },
           "businessName" : {
             "type" : "string",
-            "description" : "The company name for this user",
-            "example" : "Knowledge Anywhere"
+            "example" : "Knowledge Anywhere",
+            "description" : "The company name for this user"
           },
           "phone" : {
             "type" : "string",
-            "description" : "The phone number for this user",
-            "example" : "800-850-2025"
+            "example" : "800-850-2025",
+            "description" : "The phone number for this user"
           },
           "address1" : {
             "type" : "string",
-            "description" : "The street address, P.O. Box for this user",
-            "example" : "3015 112th Ave NE"
+            "example" : "3015 112th Ave NE",
+            "description" : "The street address, P.O. Box for this user"
           },
           "address2" : {
             "type" : "string",
-            "description" : "The apartment, suite, unit building, floor, etc for this user",
-            "example" : "Suite 210"
+            "example" : "Suite 210",
+            "description" : "The apartment, suite, unit building, floor, etc for this user"
           },
           "city" : {
             "type" : "string",
-            "description" : "The city for the user",
-            "example" : "Bellevue"
+            "example" : "Bellevue",
+            "description" : "The city for the user"
           },
           "state" : {
             "type" : "string",
-            "description" : "The 2 or 3 letter state/province abbrevation for the user.",
             "example" : "WA",
-            "enum" : [ "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY", "DC", "PR", "AB", "BC", "MB", "NB", "NL", "NT", "NS", "NU", "ON", "PE", "QC", "SK", "YT", "AGU", "BCN", "BCS", "CAM", "COA", "COL", "CHP", "CHH", "DUR", "GUA", "GRO", "HID", "JAL", "MEX", "MIC", "MOR", "NAY", "NLE", "OAX", "PUE", "QUE", "ROO", "SLP", "SIN", "SON", "TAB", "TAM", "TLA", "VER", "YUC", "ZAC" ]
+            "description" : "The 2 or 3 letter state/province abbrevation for the user.",
+            "enum" : [ "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY", "DC", "PR", "AB", "BC", "MB", "NB", "NL", "NT", "NS", "NU", true, "PE", "QC", "SK", "YT", "AGU", "BCN", "BCS", "CAM", "COA", "COL", "CHP", "CHH", "DUR", "GUA", "GRO", "HID", "JAL", "MEX", "MIC", "MOR", "NAY", "NLE", "OAX", "PUE", "QUE", "ROO", "SLP", "SIN", "SON", "TAB", "TAM", "TLA", "VER", "YUC", "ZAC" ]
           },
           "postalCode" : {
             "type" : "string",
-            "description" : "The zip or postal code for the user",
-            "example" : "98004"
+            "example" : 98004,
+            "description" : "The zip or postal code for the user"
           },
           "country" : {
             "type" : "string",
-            "description" : "The 2 or 3 letter ISO country code country for the user. See https://www.iso.org/iso-3166-country-codes.html for the list of valid country codes.   Defaults to the country specified in your LMS configuration.   If a invalid country is specified, the operation will continue, but a warning will be thrown.",
             "example" : "US",
+            "description" : "The 2 or 3 letter ISO country code country for the user. See https://www.iso.org/iso-3166-country-codes.html for the list of valid country codes.   Defaults to the country specified in your LMS configuration.   If a invalid country is specified, the operation will continue, but a warning will be thrown.",
             "enum" : [ "2 or 3 letter country code" ]
           },
           "customFields" : {
             "type" : "array",
             "items" : {
-              "$ref" : "#/components/schemas/User_customFields"
+              "type" : "object",
+              "properties" : {
+                "name" : {
+                  "type" : "string",
+                  "example" : "Job Title",
+                  "description" : "If the property is not matched to an existing value in the system, it will be created."
+                },
+                "value" : {
+                  "type" : "string",
+                  "example" : "Manager or Manager,IT",
+                  "description" : "The value can be a single value or a comma seperated string.   If the property is not matched to an existing value, it will be created."
+                }
+              }
             }
           },
           "metadata" : {
-            "$ref" : "#/components/schemas/User_metadata"
+            "type" : "object",
+            "properties" : {
+              "createDate" : {
+                "type" : "string",
+                "example" : "2018-02-10T00:28:22",
+                "description" : "Date when user was created in the system, UTC."
+              },
+              "updateDate" : {
+                "type" : "string",
+                "example" : "2018-02-10T00:28:22",
+                "description" : "Date user was last modified, UTC.    Defaults to a users create date if they have never been modified."
+              },
+              "lastLogin" : {
+                "type" : "string",
+                "example" : "2018-02-10T00:28:22",
+                "description" : "Date of users last login, UTC.   Defaults to a users create date if they have not logged in yet."
+              },
+              "loginCount" : {
+                "example" : 1,
+                "type" : "integer",
+                "description" : "Count of how many times a user has logged into the LMS."
+              }
+            }
           }
         }
       },
       "ErrorResponse" : {
+        "description" : "Object containing error information for either a user or server error",
         "properties" : {
           "code" : {
             "type" : "string"
@@ -472,10 +505,10 @@
           "message" : {
             "type" : "string"
           }
-        },
-        "description" : "Object containing error information for either a user or server error"
+        }
       },
       "ApiUserResult" : {
+        "description" : "Object containing information about the result of the operation.     Any warnings encountered during the operation, such as invalid data will be pushed to the `warnings` array.",
         "properties" : {
           "code" : {
             "type" : "string"
@@ -490,65 +523,7 @@
           "hasWarnings" : {
             "type" : "boolean"
           }
-        },
-        "description" : "Object containing information about the result of the operation.     Any warnings encountered during the operation, such as invalid data will be pushed to the `warnings` array."
-      },
-      "User_customFields" : {
-        "type" : "object",
-        "properties" : {
-          "name" : {
-            "type" : "string",
-            "description" : "If the property is not matched to an existing value in the system, it will be created.",
-            "example" : "Job Title"
-          },
-          "value" : {
-            "type" : "string",
-            "description" : "The value can be a single value or a comma seperated string.   If the property is not matched to an existing value, it will be created.",
-            "example" : "Manager or Manager,IT"
-          }
         }
-      },
-      "User_metadata" : {
-        "type" : "object",
-        "properties" : {
-          "createDate" : {
-            "type" : "string",
-            "description" : "Date when user was created in the system, UTC.",
-            "example" : "2018-02-10T00:28:22"
-          },
-          "updateDate" : {
-            "type" : "string",
-            "description" : "Date user was last modified, UTC.    Defaults to a users create date if they have never been modified.",
-            "example" : "2018-02-10T00:28:22"
-          },
-          "lastLogin" : {
-            "type" : "string",
-            "description" : "Date of users last login, UTC.   Defaults to a users create date if they have not logged in yet.",
-            "example" : "2018-02-10T00:28:22"
-          },
-          "loginCount" : {
-            "type" : "integer",
-            "description" : "Count of how many times a user has logged into the LMS.",
-            "example" : 1
-          }
-        }
-      }
-    },
-    "securitySchemes" : {
-      "oAuthToken" : {
-        "type" : "oauth2",
-        "description" : "Obtain Keys from the LMS admin panel and use them to request a token by doing a post to the /auth/token endpoint.   A succesful request will return an `access_code` that can be included in a Authorization header in the format of `Authorization: Bearer {access_token}`",
-        "flows" : {
-          "clientCredentials" : {
-            "tokenUrl" : "http://externalapi.lms.knowledgeanywhere.com/auth/token"
-          }
-        }
-      },
-      "bearerAuth" : {
-        "type" : "http",
-        "description" : "Authorization header containing bearer token.   You must first get an `access_token` more info:  [https://somelink]",
-        "scheme" : "bearer",
-        "bearerFormat" : "JWT"
       }
     }
   }
