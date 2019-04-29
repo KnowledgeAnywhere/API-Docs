@@ -330,7 +330,7 @@
         "description" : "Obtain Keys from the LMS admin panel and use them to request a token by doing a post to the /auth/token endpoint.   A succesful request will return an `access_code` that can be included in a Authorization header in the format of `Authorization: Bearer {access_token}`",
         "flows" : {
           "clientCredentials" : {
-            "tokenUrl" : "http://publicapi.knowledgeanywhere.com/auth/token"
+            "tokenUrl" : "https://publicapi.knowledgeanywhere.com/auth/token"
           }
         }
       },
