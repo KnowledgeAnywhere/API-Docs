@@ -1,0 +1,487 @@
+{
+	"info": {
+		"_postman_id": "afed0456-8673-2df7-8ae8-3a9a152a3224",
+		"name": "Public API - Universal",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Auth Token",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "{{client}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{secret}}",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/auth/token",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"auth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ping",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "54d3a29b-4fc5-43ed-842e-2c7d82a9ae41",
+						"exec": [
+							"pm.environment.get(\"client\");",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/ping",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"ping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User By ExternalId",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "2cf6a358-c129-4ace-99e8-6df25aec4560",
+						"type": "text/javascript",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: pm.environment.get(\"url\") + '/auth/token',",
+							"    method: 'POST',",
+							"    header: {",
+							"    \"content-type\": \"application/x-www-form-urlencoded\"",
+							"    },",
+							"      body: {",
+							"          mode: 'urlencoded',",
+							"          urlencoded: [",
+							"            {key: \"grant_type\", value: \"client_credentials\", disabled: false},",
+							"            {key: \"client_id\", value: pm.environment.get(\"client\"), disabled: false},",
+							"            {key: \"client_secret\", value: pm.environment.get(\"secret\"), disabled: false}",
+							"        ]",
+							"      }",
+							"}, function (err, res) {",
+							"    console.log(err ? err : res.json());",
+							"    pm.environment.set(\"authorization\", \"Bearer \" + res.json().access_token);",
+							"});"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "16014410-bd0c-4200-bc76-19493eabadd8",
+						"type": "text/javascript",
+						"exec": [
+							"",
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.length).to.eql(92);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{authorization}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{url}}/v1/user/504?",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"user",
+						"504"
+					],
+					"query": [
+						{
+							"key": "externalids",
+							"value": "100,200",
+							"disabled": true
+						},
+						{
+							"key": "startdate",
+							"value": "1509570354552",
+							"disabled": true
+						},
+						{
+							"key": "enddate",
+							"value": "1512857154552",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create User",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "47819bb6-1b9b-4c55-880c-c62c1de82edf",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: pm.environment.get(\"url\") + '/auth/token',",
+							"    method: 'POST',",
+							"    header: {",
+							"    \"content-type\": \"application/x-www-form-urlencoded\"",
+							"    },",
+							"      body: {",
+							"          mode: 'urlencoded',",
+							"          urlencoded: [",
+							"            {key: \"grant_type\", value: \"client_credentials\", disabled: false},",
+							"            {key: \"client_id\", value: pm.environment.get(\"client\"), disabled: false},",
+							"            {key: \"client_secret\", value: pm.environment.get(\"secret\"), disabled: false}",
+							"        ]",
+							"      }",
+							"}, function (err, res) {",
+							"    console.log(err ? err : res.json());",
+							"    pm.environment.set(\"authorization\", \"Bearer \" + res.json().access_token);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{authorization}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"firstName\": \"John\",\r\n  \"lastName\": \"Doe\",\r\n  \"email\": \"test@example.com\",\r\n  \"externalId\": \"23456789\",\r\n  \"password\": \"12345alpha\",\r\n  \"active\": true,\r\n  \"sendinitialemail\": false,\r\n  \"forcepasswordchange\": true,\r\n  \"locale\": \"en-us\",\r\n  \"registrationCode\": \"regcodeone\",\r\n  \"businessName\": \"Knowledge Anywhere\",\r\n  \"phone\": \"800-850-2025\",\r\n  \"address1\": \"3015 112th Ave NE\",\r\n  \"address2\": \"Suite 210\",\r\n  \"city\": \"Bellevue\",\r\n  \"state\": \"WA\",\r\n  \"postalCode\": 98004,\r\n  \"country\": \"us\",\r\n  \"customFields\": [{\r\n  \t\"name\": \"Custom Dropdown One\",\r\n  \t\"value\": \"1234\"\r\n  }]\r\n}"
+				},
+				"url": {
+					"raw": "{{url}}/v1/user",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User by ExternalD",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "ef2c066f-ec68-4ec4-a51f-5cf84c745e1b",
+						"type": "text/javascript",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: pm.environment.get(\"url\") + '/auth/token',",
+							"    method: 'POST',",
+							"    header: {",
+							"    \"content-type\": \"application/x-www-form-urlencoded\"",
+							"    },",
+							"      body: {",
+							"          mode: 'urlencoded',",
+							"          urlencoded: [",
+							"            {key: \"grant_type\", value: \"client_credentials\", disabled: false},",
+							"            {key: \"client_id\", value: pm.environment.get(\"client\"), disabled: false},",
+							"            {key: \"client_secret\", value: pm.environment.get(\"secret\"), disabled: false}",
+							"        ]",
+							"      }",
+							"}, function (err, res) {",
+							"    console.log(err ? err : res.json());",
+							"    pm.environment.set(\"authorization\", \"Bearer \" + res.json().access_token);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{authorization}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"firstName\": \"Piper\",\r\n  \"lastName\": \"Maoschino\",\r\n  \"email\": \"abcd@knowledgeanywhere.com\",\r\n  \"externalId\": \"504\",\r\n  \"locale\": \"en-us\",\r\n  \"registrationCode\": \"regcodeone\",\r\n  \"businessName\": \"Knowledge Anywhere\",\r\n  \"phone\": \"800-850-2025\",\r\n  \"address1\": \"3015 112th Ave NE\",\r\n  \"address2\": \"Suite 210\",\r\n  \"city\": \"Bellevue\",\r\n  \"state\": \"WA\",\r\n  \"postalCode\": 98004,\r\n  \"country\": \"CA\",\r\n  \"customFields\": []\r\n}"
+				},
+				"url": {
+					"raw": "{{url}}/v1/user",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Users",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "2cf6a358-c129-4ace-99e8-6df25aec4560",
+						"type": "text/javascript",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: pm.environment.get(\"url\") + '/auth/token',",
+							"    method: 'POST',",
+							"    header: {",
+							"    \"content-type\": \"application/x-www-form-urlencoded\"",
+							"    },",
+							"      body: {",
+							"          mode: 'urlencoded',",
+							"          urlencoded: [",
+							"            {key: \"grant_type\", value: \"client_credentials\", disabled: false},",
+							"            {key: \"client_id\", value: pm.environment.get(\"client\"), disabled: false},",
+							"            {key: \"client_secret\", value: pm.environment.get(\"secret\"), disabled: false}",
+							"        ]",
+							"      }",
+							"}, function (err, res) {",
+							"    console.log(err ? err : res.json());",
+							"    pm.environment.set(\"authorization\", \"Bearer \" + res.json().access_token);",
+							"});"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "16014410-bd0c-4200-bc76-19493eabadd8",
+						"type": "text/javascript",
+						"exec": [
+							"",
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.length).to.eql(92);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{authorization}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{url}}/v1/users?ssoids=700,2F13BF31-CF88-4215-8A22-94963C21D10C&includeinactive=true",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"users"
+					],
+					"query": [
+						{
+							"key": "externalids",
+							"value": "100,200",
+							"disabled": true
+						},
+						{
+							"key": "startdate",
+							"value": "1509570354552",
+							"disabled": true
+						},
+						{
+							"key": "enddate",
+							"value": "1512857154552",
+							"disabled": true
+						},
+						{
+							"key": "offset",
+							"value": "1000",
+							"disabled": true
+						},
+						{
+							"key": "ssoids",
+							"value": "700,2F13BF31-CF88-4215-8A22-94963C21D10C"
+						},
+						{
+							"key": "emails",
+							"value": "tacocorp",
+							"disabled": true
+						},
+						{
+							"key": "includeinactive",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create User (Min Requirements)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "47819bb6-1b9b-4c55-880c-c62c1de82edf",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: pm.environment.get(\"url\") + '/auth/token',",
+							"    method: 'POST',",
+							"    header: {",
+							"    \"content-type\": \"application/x-www-form-urlencoded\"",
+							"    },",
+							"      body: {",
+							"          mode: 'urlencoded',",
+							"          urlencoded: [",
+							"            {key: \"grant_type\", value: \"client_credentials\", disabled: false},",
+							"            {key: \"client_id\", value: pm.environment.get(\"client\"), disabled: false},",
+							"            {key: \"client_secret\", value: pm.environment.get(\"secret\"), disabled: false}",
+							"        ]",
+							"      }",
+							"}, function (err, res) {",
+							"    console.log(err ? err : res.json());",
+							"    pm.environment.set(\"authorization\", \"Bearer \" + res.json().access_token);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{authorization}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"firstName\": \"John\",\r\n  \"lastName\": \"Doe\",\r\n  \"email\": \"test@example.com\",\r\n  \"externalId\": \"23456789\",\r\n  \"password\": \"12345alpha\",\r\n  \"active\": true,\r\n  \"forcePasswordChange\": true,\r\n  \"customFields\": [{\r\n  \t\"name\": \"Custom Dropdown One\",\r\n  \t\"value\": \"1234\"\r\n  }]\r\n}"
+				},
+				"url": {
+					"raw": "{{url}}/v1/user",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"user"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "0006d9c4-6745-4341-9737-7fb2908edd50",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "130b0001-2a71-4349-a484-908e1b24f57e",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
